@@ -1,0 +1,402 @@
+/* =============================================
+   SPENDWISE DASHBOARD — WEEK 4 CAPSTONE
+   ============================================= */
+
+/* ---------- THEME (CSS Custom Properties) ---------- */
+:root {
+    /* Brand */
+    --brand: #0F766E;
+    --brand-dark: #0B5A54;
+    --brand-light: #CCE7E4;
+
+    /* Accent */
+    --accent: #F59E0B;
+    --accent-dark: #B45309;
+
+    /* Surfaces */
+    --bg: #F4F7F6;
+    --surface: #FFFFFF;
+    --surface-alt: #F9FAFB;
+
+    /* Text */
+    --text: #111827;
+    --text-secondary: #6B7280;
+
+    /* Borders / misc */
+    --border: #E5E7EB;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.10);
+
+    /* Fonts */
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- BASE ---------- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+/* =============================================
+   DASHBOARD LAYOUT (CSS GRID)
+   ============================================= */
+.dashboard {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+}
+
+/* =============================================
+   SIDEBAR (FLEXBOX)
+   ============================================= */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 16px;
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: var(--brand);
+    color: #fff;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+}
+
+.brand-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.nav-item:hover {
+    background-color: var(--surface-alt);
+    color: var(--text);
+}
+
+.nav-item.active {
+    background-color: var(--brand-light);
+    color: var(--brand-dark);
+    font-weight: 600;
+}
+
+.nav-icon {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* =============================================
+   MAIN AREA
+   ============================================= */
+.main {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 32px;
+    gap: 24px;
+}
+
+/* ---------- HEADER (FLEXBOX) ---------- */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.subtitle {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.15s;
+}
+
+.icon-btn:hover {
+    background-color: var(--surface-alt);
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+/* ---------- SUMMARY ROW (FLEXBOX) ---------- */
+.summary {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.summary-card {
+    flex: 1 1 180px;
+    padding: 18px;
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.summary-label {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.summary-value {
+    margin: 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.summary-change {
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.summary-change.up {
+    color: var(--brand);
+}
+
+.summary-change.down {
+    color: var(--accent-dark);
+}
+
+/* =============================================
+   CATEGORY CARDS (GRID + FLEXBOX INSIDE)
+   ============================================= */
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.15rem;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    outline: none;
+
+    /* Micro-interaction */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Micro-interaction: hover + keyboard focus (250ms or less) */
+.card:hover,
+.card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--brand);
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+}
+
+.card-icon.food          { background: #FEF3C7; }
+.card-icon.transport     { background: #DBEAFE; }
+.card-icon.rent          { background: #FCE7F3; }
+.card-icon.entertainment { background: #EDE9FE; }
+.card-icon.savings       { background: #D1FAE5; }
+.card-icon.utilities     { background: #FEE2E2; }
+
+.card-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.card-amount {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.card-meta {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* =============================================
+   RESPONSIVE — STACK BELOW 768px
+   ============================================= */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 12px 16px;
+        gap: 12px;
+    }
+
+    .brand {
+        border-bottom: none;
+        padding: 0;
+    }
+
+    .nav {
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .nav-item span:not(.nav-icon) {
+        display: none;   /* hide labels, keep icons */
+    }
+
+    .main {
+        padding: 16px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-right {
+        align-self: flex-end;
+    }
+
+    .summary {
+        flex-direction: column;
+    }
+}
+
+/* =============================================
+   DARK THEME — overrides :root variables only
+   ============================================= */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --brand: #14B8A6;
+        --brand-dark: #0F766E;
+        --brand-light: #134E4A;
+
+        --accent: #F59E0B;
+        --accent-dark: #FBBF24;
+
+        --bg: #0F172A;
+        --surface: #1E293B;
+        --surface-alt: #273449;
+
+        --text: #F1F5F9;
+        --text-secondary: #94A3B8;
+
+        --border: #334155;
+
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-icon.food          { background: #78350F; }
+    .card-icon.transport     { background: #1E3A8A; }
+    .card-icon.rent          { background: #831843; }
+    .card-icon.entertainment { background: #4C1D95; }
+    .card-icon.savings       { background: #065F46; }
+    .card-icon.utilities     { background: #7F1D1D; }
+}

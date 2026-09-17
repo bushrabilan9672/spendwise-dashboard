@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpendWise — Dashboard</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <!-- ============================================ -->
+        <!-- SIDEBAR                                       -->
+        <!-- ============================================ -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">₵</div>
+                <span class="brand-name">SpendWise</span>
+            </div>
+
+            <nav class="nav">
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">↔</span>
+                    <span>Transactions</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">◔</span>
+                    <span>Budgets</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">★</span>
+                    <span>Goals</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ============================================ -->
+        <!-- MAIN AREA                                     -->
+        <!-- ============================================ -->
+        <div class="main">
+
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="greeting">Good morning, Rahma 👋</h1>
+                    <p class="subtitle">Here's your spending overview</p>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" aria-label="Notifications">🔔</button>
+                    <div class="avatar">R</div>
+                </div>
+            </header>
+
+            <!-- Summary row -->
+            <section class="summary">
+                <div class="summary-card">
+                    <p class="summary-label">Total Balance</p>
+                    <p class="summary-value">$4,820.50</p>
+                    <p class="summary-change up">+12.4% this month</p>
+                </div>
+                <div class="summary-card">
+                    <p class="summary-label">Monthly Spend</p>
+                    <p class="summary-value">$1,360.20</p>
+                    <p class="summary-change down">+4.1% vs last month</p>
+                </div>
+                <div class="summary-card">
+                    <p class="summary-label">Savings Goal</p>
+                    <p class="summary-value">68%</p>
+                    <p class="summary-change up">On track</p>
+                </div>
+            </section>
+
+            <!-- Category cards -->
+            <section class="cards">
+                <h2 class="section-title">Categories</h2>
+
+                <div class="card-grid">
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon food">🍽</div>
+                        <h3 class="card-title">Food</h3>
+                        <p class="card-amount">$320.50</p>
+                        <p class="card-meta">24% of monthly budget</p>
+                    </article>
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon transport">🚌</div>
+                        <h3 class="card-title">Transport</h3>
+                        <p class="card-amount">$148.00</p>
+                        <p class="card-meta">11% of monthly budget</p>
+                    </article>
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon rent">🏠</div>
+                        <h3 class="card-title">Rent</h3>
+                        <p class="card-amount">$600.00</p>
+                        <p class="card-meta">44% of monthly budget</p>
+                    </article>
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon entertainment">🎬</div>
+                        <h3 class="card-title">Entertainment</h3>
+                        <p class="card-amount">$89.70</p>
+                        <p class="card-meta">7% of monthly budget</p>
+                    </article>
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon savings">💎</div>
+                        <h3 class="card-title">Savings</h3>
+                        <p class="card-amount">$150.00</p>
+                        <p class="card-meta">11% of monthly budget</p>
+                    </article>
+
+                    <article class="card" tabindex="0">
+                        <div class="card-icon utilities">💡</div>
+                        <h3 class="card-title">Utilities</h3>
+                        <p class="card-amount">$52.00</p>
+                        <p class="card-meta">4% of monthly budget</p>
+                    </article>
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+</html>
