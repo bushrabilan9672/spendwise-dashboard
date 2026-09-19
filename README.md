@@ -1,61 +1,35 @@
-# SpendWise — Personal Budget Tracker
+# SpendWise — Interactive Budget Tracker
 
-A responsive dashboard for tracking personal spending, built with HTML, CSS, and JavaScript. The project will grow over time into a full budgeting application.
+A responsive budgeting dashboard built with HTML, CSS, and JavaScript. Users can set a monthly budget, add expenses, and watch the dashboard update in real time.
 
-## What SpendWise Does
+## What Changed This Week
 
-SpendWise helps users track a monthly budget and expenses. The dashboard displays a summary of their financial situation — remaining balance, percent spent, and overall status — along with category cards for Food, Transport, Rent, Entertainment, Savings, and Utilities.
+In previous weeks, SpendWise was a static dashboard with hard-coded numbers. This week it became **interactive**:
 
-## Project Structure
+- Added a form for entering expenses (name, amount, category)
+- Added a **live expense list** rendered from an array
+- Connected the summary cards and category cards to real calculations
+- Attached **event listeners** so user actions update the page instantly
+- Removed hard-coded numbers from the HTML — everything is computed by JavaScript
 
-- `index.html` — the dashboard layout
-- `style.css` — all styling, theming, and responsive rules
-- `script.js` — JavaScript logic for data, input, and calculations
-- `screenshots/` — screenshots of the dashboard and console output
-- `README.md` — this file
+## How Conditionals Are Used
 
-## JavaScript Concepts Implemented
+Conditionals appear in several places:
 
-### Variables
-- **`const`** is used for values that shouldn't change: `APP_NAME`, `CURRENCY`, `categories`
-- **`let`** is used for values that change: `monthlyBudget`, `totalExpenses`
+- **Validating form input** — if the name is empty or the amount isn't a positive number, show an alert and stop
+- **Choosing the balance status** — `if (balance < 0)` → "Over budget", `else if` low balance, `else` → "On track"
+- **Handling the empty state** — `if (expenses.length === 0)` shows "No expenses yet"
+- **Filtering by category** — `if (expenses[i].category === category)` in `calculateCategoryTotal()`
+- **Guarding against divide by zero** — `if (monthlyBudget === 0) return 0`
 
-### Data Types
-- **String** — `"SpendWise"`, `"$"`
-- **Number** — `5000`, `2500`
-- **Array** — `["Food", "Transport", ...]`
-- **Object** — the summary object returned by `buildSummary()`
+## How Arrays Are Used
 
-### User Input
-- **`prompt()`** asks the user for their budget and expenses
-- Since `prompt()` returns a **string**, the input is converted with **`Number()`**
-- Invalid input is checked with **`isNaN()`** and falls back to a sensible default
+The core data structure is an array of **expense objects**:
 
-### Calculations
-- **Remaining balance** = `budget - expenses`
-- **Percent spent** = `(expenses / budget) * 100`, rounded to 1 decimal
-- **Currency formatting** using `toLocaleString()` for thousands separators and 2 decimals
-- **Status** determined with a conditional: `balance >= 0 ? "On track" : "Over budget"`
+```js
+let expenses = [
+    { name: "Lunch", amount: 250, category: "Food" },
+    { name: "Bus",   amount: 50,  category: "Transport" }
+];
 
-### Functions
-Functions organize the code into small, focused pieces:
-- **`calculateBalance(budget, expenses)`** — returns the remaining balance
-- **`calculateSpentPercent(budget, expenses)`** — returns the percent spent
-- **`formatCurrency(amount)`** — returns a formatted currency string
-- **`buildSummary(budget, expenses)`** — builds an object with all key figures
-- **`printSummary(summary)`** — prints the summary to the console
-- **`askForBudget()` / `askForExpenses()`** — collect and validate user input
-- **`main()`** — runs the whole flow
 
-Each function does **one job** and can be reused or tested independently.
-
-## How to Run
-
-1. Open `index.html` in a browser (or use Live Server at `127.0.0.1:5500`)
-2. Enter your budget when prompted
-3. Enter your expenses when prompted
-4. Open the browser's DevTools (`F12`) and view the **Console** tab to see the calculated summary
-
-## Coming Next
-
-Future weeks will connect this JavaScript logic to the dashboard UI — replacing static numbers with live, calculated values.

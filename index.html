@@ -60,26 +60,56 @@
                 </div>
             </header>
 
-            <!-- Summary row -->
+            <!-- Summary row (values updated by JS) -->
             <section class="summary">
                 <div class="summary-card">
                     <p class="summary-label">Total Balance</p>
-                    <p class="summary-value">$4,820.50</p>
-                    <p class="summary-change up">+12.4% this month</p>
+                    <p class="summary-value" id="total-balance">$0.00</p>
+                    <p class="summary-change up" id="balance-status">—</p>
                 </div>
                 <div class="summary-card">
                     <p class="summary-label">Monthly Spend</p>
-                    <p class="summary-value">$1,360.20</p>
-                    <p class="summary-change down">+4.1% vs last month</p>
+                    <p class="summary-value" id="total-spend">$0.00</p>
+                    <p class="summary-change down" id="spend-percent">0% of budget</p>
                 </div>
                 <div class="summary-card">
-                    <p class="summary-label">Savings Goal</p>
-                    <p class="summary-value">68%</p>
-                    <p class="summary-change up">On track</p>
+                    <p class="summary-label">Budget</p>
+                    <p class="summary-value" id="monthly-budget">$0.00</p>
+                    <p class="summary-change up">Set in prompt</p>
                 </div>
             </section>
 
-            <!-- Category cards -->
+            <!-- Add expense form -->
+            <section class="add-expense">
+                <h2 class="section-title">Add an Expense</h2>
+                <form id="expense-form" class="expense-form">
+                    <div class="form-row">
+                        <label for="expense-name">Name</label>
+                        <input type="text" id="expense-name" placeholder="e.g. Lunch" required />
+                    </div>
+
+                    <div class="form-row">
+                        <label for="expense-amount">Amount</label>
+                        <input type="number" id="expense-amount" placeholder="0.00" min="0" step="0.01" required />
+                    </div>
+
+                    <div class="form-row">
+                        <label for="expense-category">Category</label>
+                        <select id="expense-category">
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Savings">Savings</option>
+                            <option value="Utilities">Utilities</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="add-btn">Add Expense</button>
+                </form>
+            </section>
+
+            <!-- Category cards (values updated by JS) -->
             <section class="cards">
                 <h2 class="section-title">Categories</h2>
 
@@ -88,46 +118,54 @@
                     <article class="card" tabindex="0">
                         <div class="card-icon food">🍽</div>
                         <h3 class="card-title">Food</h3>
-                        <p class="card-amount">$320.50</p>
-                        <p class="card-meta">24% of monthly budget</p>
+                        <p class="card-amount" data-category="Food">$0.00</p>
+                        <p class="card-meta" data-category-meta="Food">0% of monthly budget</p>
                     </article>
 
                     <article class="card" tabindex="0">
                         <div class="card-icon transport">🚌</div>
                         <h3 class="card-title">Transport</h3>
-                        <p class="card-amount">$148.00</p>
-                        <p class="card-meta">11% of monthly budget</p>
+                        <p class="card-amount" data-category="Transport">$0.00</p>
+                        <p class="card-meta" data-category-meta="Transport">0% of monthly budget</p>
                     </article>
 
                     <article class="card" tabindex="0">
                         <div class="card-icon rent">🏠</div>
                         <h3 class="card-title">Rent</h3>
-                        <p class="card-amount">$600.00</p>
-                        <p class="card-meta">44% of monthly budget</p>
+                        <p class="card-amount" data-category="Rent">$0.00</p>
+                        <p class="card-meta" data-category-meta="Rent">0% of monthly budget</p>
                     </article>
 
                     <article class="card" tabindex="0">
                         <div class="card-icon entertainment">🎬</div>
                         <h3 class="card-title">Entertainment</h3>
-                        <p class="card-amount">$89.70</p>
-                        <p class="card-meta">7% of monthly budget</p>
+                        <p class="card-amount" data-category="Entertainment">$0.00</p>
+                        <p class="card-meta" data-category-meta="Entertainment">0% of monthly budget</p>
                     </article>
 
                     <article class="card" tabindex="0">
                         <div class="card-icon savings">💎</div>
                         <h3 class="card-title">Savings</h3>
-                        <p class="card-amount">$150.00</p>
-                        <p class="card-meta">11% of monthly budget</p>
+                        <p class="card-amount" data-category="Savings">$0.00</p>
+                        <p class="card-meta" data-category-meta="Savings">0% of monthly budget</p>
                     </article>
 
                     <article class="card" tabindex="0">
                         <div class="card-icon utilities">💡</div>
                         <h3 class="card-title">Utilities</h3>
-                        <p class="card-amount">$52.00</p>
-                        <p class="card-meta">4% of monthly budget</p>
+                        <p class="card-amount" data-category="Utilities">$0.00</p>
+                        <p class="card-meta" data-category-meta="Utilities">0% of monthly budget</p>
                     </article>
 
                 </div>
+            </section>
+
+            <!-- Expense list (populated by JS) -->
+            <section class="expense-list-section">
+                <h2 class="section-title">Recent Expenses</h2>
+                <ul id="expense-list" class="expense-list">
+                    <li class="empty">No expenses yet. Add one above.</li>
+                </ul>
             </section>
 
         </div>

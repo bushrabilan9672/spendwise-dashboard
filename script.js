@@ -1,56 +1,84 @@
 /* =============================================
-   SPENDWISE — JavaScript Foundation
-   Week 6: Variables, Input, Calculations, Functions
+   SPENDWISE — Interactive Dashboard
+   Week 6: Conditionals, Arrays, Loops, DOM, Events
    ============================================= */
 
 // =============================================
-// 1. APPLICATION DATA (Variables)
+// 1. APPLICATION DATA
 // =============================================
-// These represent the core budgeting information.
-// `let` is used for values that may change (like totals).
-// `const` is used for values that shouldn't be reassigned.
 
 const APP_NAME = "SpendWise";
 const CURRENCY = "$";
 
-// Starting budget data (defaults)
+// Starting budget (user can override via prompt)
 let monthlyBudget = 5000;
-let totalExpenses = 0;
 
-// Categories we track (an array — a list of values)
-const categories = ["Food", "Transport", "Rent", "Entertainment", "Savings", "Utilities"];
+// The main data store — an array of expense objects
+// Each expense: { name: "Lunch", amount: 250, category: "Food" }
+let expenses = [];
 
 // =============================================
 // 2. CALCULATION FUNCTIONS
 // =============================================
-// These functions keep logic organised and reusable.
 
 /**
- * Calculates the remaining balance.
- * @param {number} budget - Total budget
- * @param {number} expenses - Total expenses
- * @returns {number} remaining balance
+ * Calculate total spent across all expenses.
+ * Uses a loop to sum the amounts.
  */
-function calculateBalance(budget, expenses) {
-    return budget - expenses;
+function calculateTotalSpent() {
+    let total = 0;
+    for (let i = 0; i < expenses.length; i++) {
+        total = total + expenses[i].amount;
+    }
+    return total;
 }
 
 /**
- * Calculates what percentage of the budget has been spent.
- * @param {number} budget - Total budget
- * @param {number} expenses - Total expenses
- * @returns {number} percent spent (rounded to 1 decimal)
+ * Calculate remaining balance.
  */
-function calculateSpentPercent(budget, expenses) {
-    if (budget === 0) return 0;   // avoid divide by zero
-    const percent = (expenses / budget) * 100;
+function calculateBalance() {
+    return monthlyBudget - calculateTotalSpent();
+}
+
+/**
+ * Calculate what percent of the budget has been spent.
+ */
+function calculateSpentPercent() {
+    if (monthlyBudget === 0) return 0;
+    const percent = (calculateTotalSpent() / monthlyBudget) * 100;
     return Math.round(percent * 10) / 10;
 }
 
 /**
- * Formats a number as currency (e.g. 1234.5 → "$1,234.50")
- * @param {number} amount
- * @returns {string}
+ * Get total spent in a specific category.
+ * Uses a loop + conditional to filter by category.
+ */
+function calculateCategoryTotal(category) {
+    let total = 0;
+    for (let i = 0; i < expenses.length; i++) {
+        if (expenses[i].category === category) {
+            total = total + expenses[i].amount;
+        }
+    }
+    return total;
+}
+
+/**
+ * Get the status based on the balance.
+ * Uses conditionals to decide which message applies.
+ */
+function getBalanceStatus(balance) {
+    if (balance < 0) {
+        return { text: "Over budget", className: "down" };
+    } else if (balance < monthlyBudget * 0.2) {
+        return { text: "Low balance", className: "down" };
+    } else {
+        return { text: "On track", className: "up" };
+    }
+}
+
+/**
+ * Format a number as currency.
  */
 function formatCurrency(amount) {
     return CURRENCY + amount.toLocaleString("en-US", {
@@ -59,91 +87,158 @@ function formatCurrency(amount) {
     });
 }
 
-/**
- * Builds a full budget summary object from budget + expenses.
- * @param {number} budget
- * @param {number} expenses
- * @returns {object} summary
- */
-function buildSummary(budget, expenses) {
-    const balance = calculateBalance(budget, expenses);
-    const percent = calculateSpentPercent(budget, expenses);
-
-    return {
-        budget: budget,
-        expenses: expenses,
-        balance: balance,
-        percentSpent: percent,
-        status: balance >= 0 ? "On track" : "Over budget"
-    };
-}
+// =============================================
+// 3. DOM UPDATE FUNCTIONS
+// =============================================
 
 /**
- * Prints a nicely formatted summary to the console.
- * @param {object} summary
+ * Update the summary cards (balance, spend, budget).
  */
-function printSummary(summary) {
-    console.log("================================");
-    console.log(`  ${APP_NAME} — Budget Summary`);
-    console.log("================================");
-    console.log(`Budget:         ${formatCurrency(summary.budget)}`);
-    console.log(`Expenses:       ${formatCurrency(summary.expenses)}`);
-    console.log(`Remaining:      ${formatCurrency(summary.balance)}`);
-    console.log(`Spent:          ${summary.percentSpent}%`);
-    console.log(`Status:         ${summary.status}`);
-    console.log("================================");
+function updateSummary() {
+    const balance = calculateBalance();
+    const spent = calculateTotalSpent();
+    const percent = calculateSpentPercent();
+
+    document.getElementById("total-balance").textContent = formatCurrency(balance);
+    document.getElementById("total-spend").textContent = formatCurrency(spent);
+    document.getElementById("monthly-budget").textContent = formatCurrency(monthlyBudget);
+    document.getElementById("spend-percent").textContent = percent + "% of budget";
+
+    const status = getBalanceStatus(balance);
+    const statusEl = document.getElementById("balance-status");
+    statusEl.textContent = status.text;
+    statusEl.className = "summary-change " + status.className;
 }
 
-// =============================================
-// 3. USER INPUT (prompts)
-// =============================================
-// Prompt the user for budget information.
-// prompt() returns a STRING, so we convert with Number().
+/**
+ * Update each category card with its total spent.
+ * Uses a loop to walk every category card in the DOM.
+ */
+function updateCategoryCards() {
+    const cards = document.querySelectorAll("[data-category]");
 
-function askForBudget() {
-    const input = prompt("Enter your monthly budget:", "5000");
-    const value = Number(input);
+    for (let i = 0; i < cards.length; i++) {
+        const category = cards[i].dataset.category;
+        const total = calculateCategoryTotal(category);
+        cards[i].textContent = formatCurrency(total);
 
-    // Validate: must be a positive number
-    if (isNaN(value) || value <= 0) {
-        console.warn("Invalid budget. Using default of 5000.");
-        return 5000;
+        // Update the meta line: "X% of monthly budget"
+        const metaEl = document.querySelector(`[data-category-meta="${category}"]`);
+        if (metaEl) {
+            const percent = monthlyBudget === 0 ? 0 : Math.round((total / monthlyBudget) * 100);
+            metaEl.textContent = percent + "% of monthly budget";
+        }
     }
-    return value;
 }
 
-function askForExpenses() {
-    const input = prompt("Enter your total expenses so far:", "2500");
-    const value = Number(input);
+/**
+ * Render the expense list in the DOM.
+ * Uses a loop to build list items.
+ */
+function updateExpenseList() {
+    const list = document.getElementById("expense-list");
+    list.innerHTML = "";
 
-    // Validate: must be a number >= 0
-    if (isNaN(value) || value < 0) {
-        console.warn("Invalid expenses. Using default of 0.");
-        return 0;
+    // Conditional: show empty message if no expenses
+    if (expenses.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = "No expenses yet. Add one above.";
+        list.appendChild(empty);
+        return;
     }
-    return value;
+
+    // Loop through expenses and add each to the list
+    for (let i = 0; i < expenses.length; i++) {
+        const exp = expenses[i];
+        const li = document.createElement("li");
+        li.className = "expense-item";
+        li.innerHTML = `
+            <span class="expense-name">${exp.name}</span>
+            <span class="expense-category">${exp.category}</span>
+            <span class="expense-amount">${formatCurrency(exp.amount)}</span>
+        `;
+        list.appendChild(li);
+    }
+}
+
+/**
+ * Master update — refresh every part of the UI.
+ */
+function updateDashboard() {
+    updateSummary();
+    updateCategoryCards();
+    updateExpenseList();
 }
 
 // =============================================
-// 4. MAIN FLOW
+// 4. EVENT HANDLERS
 // =============================================
-// This runs when the page loads.
 
-function main() {
+/**
+ * Handle form submission — add a new expense.
+ * Uses preventDefault to stop page reload.
+ */
+function handleAddExpense(event) {
+    event.preventDefault();
+
+    // Read the input values
+    const nameInput = document.getElementById("expense-name");
+    const amountInput = document.getElementById("expense-amount");
+    const categoryInput = document.getElementById("expense-category");
+
+    const name = nameInput.value.trim();
+    const amount = Number(amountInput.value);
+    const category = categoryInput.value;
+
+    // Validate — conditionals catch bad input
+    if (name === "") {
+        alert("Please enter an expense name.");
+        return;
+    }
+    if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid amount greater than 0.");
+        return;
+    }
+
+    // Build the expense object and push into the array
+    const expense = { name: name, amount: amount, category: category };
+    expenses.push(expense);
+
+    // Reset the form for the next entry
+    amountInput.value = "";
+    nameInput.value = "";
+    nameInput.focus();
+
+    // Refresh the dashboard
+    updateDashboard();
+
+    console.log(`Added expense: ${name} — ${formatCurrency(amount)} (${category})`);
+}
+
+// =============================================
+// 5. INITIALISE
+// =============================================
+
+function init() {
     console.log(`Welcome to ${APP_NAME}!`);
 
-    // Ask the user for their data
-    monthlyBudget = askForBudget();
-    totalExpenses = askForExpenses();
+    // Ask for the monthly budget (single prompt on load)
+    const input = prompt("Enter your monthly budget:", monthlyBudget);
+    const parsed = Number(input);
+    if (!isNaN(parsed) && parsed > 0) {
+        monthlyBudget = parsed;
+    } else {
+        console.log(`Using default budget: ${formatCurrency(monthlyBudget)}`);
+    }
 
-    // Build the summary object
-    const summary = buildSummary(monthlyBudget, totalExpenses);
+    // Attach event listener to the form
+    const form = document.getElementById("expense-form");
+    form.addEventListener("submit", handleAddExpense);
 
-    // Print it to the console
-    printSummary(summary);
-
-    console.log("Tracked categories:", categories.join(", "));
+    // Initial render
+    updateDashboard();
 }
 
-// Run the app
-main();
+// Run when the DOM is ready
+document.addEventListener("DOMContentLoaded", init);
